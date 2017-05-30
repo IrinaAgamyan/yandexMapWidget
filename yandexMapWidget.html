@@ -13,7 +13,7 @@
     JFCustomWidget.subscribe("ready", function(){
         mapOptions.centerLatitude = JFCustomWidget.getWidgetSetting('centerLatitude');
         mapOptions.centerLongitude = JFCustomWidget.getWidgetSetting('centerLongitude');
-        mapOptions.zoom = JFCustomWidget.getWidgetSetting('zoom');
+        mapOptions.zoom = JFCustomWidget.getWidgetSetting('zoom') || 7;
         mapOptions.placemarkLatitude = JFCustomWidget.getWidgetSetting('placemarkLatitude');
         mapOptions.placemarkLongitude = JFCustomWidget.getWidgetSetting('placemarkLongitude');
         mapOptions.hintContent = JFCustomWidget.getWidgetSetting('hintContent');
@@ -25,17 +25,13 @@
     ymaps.ready(init);
     var map;
     function init(){
-        if (!mapOptions.zoom) {
-            mapOptions.zoom = 7;
-        }
         map = new ymaps.Map("map", {
             center: [mapOptions.centerLatitude, mapOptions.centerLongitude],
             zoom: mapOptions.zoom
         });
-        if (!mapOptions.mapType || mapOptions.mapType.toLowerCase() == 'roadmap') {
-            var type = 'map';
-        } else {
-            type = mapOptions.mapType.toLowerCase();
+        var type = 'map';
+        if (mapOptions.mapType && mapOptions.mapType.toLowerCase() !== 'roadmap') {
+            type =  mapOptions.mapType.toLowerCase();
         }
         map.setType('yandex#' + type);
         if (mapOptions.placemarkLatitude && mapOptions.placemarkLongitude) {
